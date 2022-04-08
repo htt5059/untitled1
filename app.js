@@ -1,9 +1,11 @@
 const express = require('express')
 const path = require("path");
 const createError = require("http-errors");
-const app = express()
-const port= 3000
-const logger= require('morgan')
+const app = express();
+const port= 3000;
+const logger= require('morgan');
+
+// set UserList
 const UserList = [{username: 'test', password:'1234'},
   {username: 'htt5059', password: 'HuyTran'},
   {userName: 'CMPSC421', password: 'netcentric'}];
@@ -38,7 +40,23 @@ Auth_password.use('local', new LocalStrategy(
 ))
 
 // set logger
-app.use(logger('dev'))
+app.use(logger('combined'));
+
+// set mongoDB
+const mongoose = require('mongoose');
+mongoose.connect("mongodb+srv://test:test@cluster0.yuixa.mongodb.net/Info?retryWrites=true&w=majority");
+var InfoSchema = mongoose.Schema({
+    name: String,
+    description: String,
+});
+
+InfoSchema.method.getName = function(){
+    return this.name;
+};
+InfoSchema.method.getDescription = function(){
+    return this.description;
+};
+var InfoModel = mongoose.model("Info", InfoSchema);
 
 // set view
 app.set('views', path.resolve(__dirname, 'views'));
@@ -58,12 +76,35 @@ app.post('/login', Auth_password.authenticate('local', {
 
 // main page
 app.get("/", function(req,res){
-  res.render('index', {Title: "Test Title in App.js", message: "This is a message from JS app"})
+  res.render('landingPage', {Title: "Test Title in App.js", message: "This is a message from JS app"})
 })
 // something else
 app.get("/somethingElse", function(req,res){
   res.render('somethingElse', {Title: "Something Else Page"})
 })
+
+// index page
+app.get("/index", function(req, res){
+    res.render('index', {Title: "Index Page"})
+})
+
+// save endpoint
+app.post('/save', function(req, res){
+    console.log("Data Post Operation");
+    console.log(mongoose.connection.readyState)
+    try{
+        var Name= req.body.name;
+        var Des = req.body.description;
+        Info = new InfoModel({name: name, description: Des});
+        console.log(Info);
+        Info.save();
+    }
+    catch(e){
+        console.log("Exception inserting a doc");
+    }
+
+    res.send("complete");
+});
 
 app.use(function(req, res){
   res.send('<!DOCTYPE html>'+

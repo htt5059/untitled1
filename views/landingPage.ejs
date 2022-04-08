@@ -1,0 +1,17 @@
+<div id="header">
+    <%-include('header.ejs')%>
+</div>
+
+<div classname="box" style="display: flex">
+    <div clasname="sidebar" style="position: fixed">
+        <%-include('sidebar.ejs')%>
+    </div>
+    <div classname="content" style="padding-left: 5rem; width: 90%">
+        <%-include('content.ejs')%>
+        <p><%= message %></p>
+    </div>
+</div>
+
+<div id="footer">
+    <%-include('footer.ejs')%>
+</div>

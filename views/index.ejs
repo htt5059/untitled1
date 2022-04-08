@@ -2,15 +2,37 @@
     <%-include('header.ejs')%>
 </div>
 
-<div classname="box" style="display: flex">
-    <div clasname="sidebar" style="position: fixed">
-        <%-include('sidebar.ejs')%>
-    </div>
-    <div classname="content" style="padding-left: 5rem; width: 90%">
-        <%-include('content.ejs')%>
-        <p><%= message %></p>
-    </div>
+<div>
+    <h1>Save and Display Info from MongoDB</h1>
 </div>
+
+<div style="border-bottom: solid gray">
+    <form action="http://localhost:3000//index" method="post">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="username" required/>
+        </div>
+        <div>
+            <label for="text">Description</label>
+            <input type="text" id="description" name="description" required/>
+        </div>
+        <button type="submit">Submit to Backend</button>
+    </form>
+</div>
+
+<div>
+    <form action="http://localhost:3000//index" method="get">
+        <button type="submit">Get Data from Backend</button>
+    </form>
+</div>
+
+<script>
+    function GetInfo(){
+        var XHP = new XMLHttpRequest();
+        console.log("Get function in progress");
+        XHP.onreadystatechange = function(){}
+    }
+</script>
 
 <div id="footer">
     <%-include('footer.ejs')%>
