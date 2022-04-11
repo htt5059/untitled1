@@ -7,10 +7,10 @@
 </div>
 
 <div style="border-bottom: solid gray">
-    <form action="http://localhost:3000//index" method="post">
+    <form action="http://localhost:3000/save" method="post">
         <div>
             <label for="name">Name</label>
-            <input type="text" id="name" name="username" required/>
+            <input type="text" id="name" name="name" required/>
         </div>
         <div>
             <label for="text">Description</label>
@@ -19,18 +19,31 @@
         <button type="submit">Submit to Backend</button>
     </form>
 </div>
-
+<br/>
 <div>
-    <form action="http://localhost:3000//index" method="get">
-        <button type="submit">Get Data from Backend</button>
+    <form>
+        <button type="submit" onclick="GetInfo()">Get Data from Backend</button>
     </form>
+</div>
+
+<div id="DisplayData">
+    <p>>></p>
 </div>
 
 <script>
     function GetInfo(){
         var XHP = new XMLHttpRequest();
+        XHP.open('get', 'http://localhost:3000/info_get', true);
+        XHP.setRequestHeader('Content-Type', 'text-plain');
         console.log("Get function in progress");
-        XHP.onreadystatechange = function(){}
+        XHP.onreadystatechange = function(){
+            if(this.readyState==4 && this.status==200){
+                document.getElementById('DisplayData').innerHTML=JSON.stringify(XHP.responseText);
+                console.log(XHP.responseText);
+            }
+        };
+        XHP.send();
+        console.log("Get function Done");
     }
 </script>
 

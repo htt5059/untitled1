@@ -44,6 +44,7 @@ app.use(logger('combined'));
 
 // set mongoDB
 const mongoose = require('mongoose');
+const {request} = require("express");
 mongoose.connect("mongodb+srv://test:test@cluster0.yuixa.mongodb.net/Info?retryWrites=true&w=majority");
 var InfoSchema = mongoose.Schema({
     name: String,
@@ -56,6 +57,7 @@ InfoSchema.method.getName = function(){
 InfoSchema.method.getDescription = function(){
     return this.description;
 };
+
 var InfoModel = mongoose.model("Info", InfoSchema);
 
 // set view
@@ -95,17 +97,30 @@ app.post('/save', function(req, res){
     try{
         var Name= req.body.name;
         var Des = req.body.description;
-        Info = new InfoModel({name: name, description: Des});
+        let Info = new InfoModel({name: Name, description: Des});
         console.log(Info);
-        Info.save();
+        Info.save().then(r => console.log(r));
     }
     catch(e){
         console.log("Exception inserting a doc");
     }
 
-    res.send("complete");
+    // res.send('complete');
 });
 
+// getInfo endpoint
+const getInfo = async function(req, res){
+    console.log('Accessing to DB')
+    let Info_func = () => (InfoModel.findOne({_name: "Huy Tuan Tran"}).exec());
+    console.log(Info_func);
+    try{res.send({"Info list": await Info_func})}
+    catch(e){
+        console.log(e);
+    }
+}
+app.get('/info_get', getInfo)
+
+// error page
 app.use(function(req, res){
   res.send('<!DOCTYPE html>'+
   '<body>'+
