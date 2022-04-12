@@ -2,6 +2,25 @@
     <%-include('header.ejs')%>
 </div>
 
+<script>
+    function GetInfo(){
+        var XHP = new XMLHttpRequest();
+
+        console.log("Get function in progress");
+        XHP.onreadystatechange = function(){
+            if(this.readyState==4 && this.status==200){
+                alert(XHP.responseText);
+                document.getElementById('DisplayData').innerHTML=JSON.stringify(XHP.responseText);
+                console.log(XHP.responseText);
+            }
+        };
+        XHP.open('get', 'http://localhost:3000/info_get', true);
+        XHP.setRequestHeader('Content-Type', 'text/plain');
+        XHP.send();
+        console.log("Get function Done");
+    }
+</script>
+
 <div>
     <h1>Save and Display Info from MongoDB</h1>
 </div>
@@ -22,7 +41,7 @@
 <br/>
 <div>
     <form>
-        <button type="submit" onclick="GetInfo()">Get Data from Backend</button>
+        <button type="button" onclick="GetInfo()">Get Data from Backend</button>
     </form>
 </div>
 
@@ -30,23 +49,6 @@
     <p>>></p>
 </div>
 
-<script>
-    function GetInfo(){
-        var XHP = new XMLHttpRequest();
-        XHP.open('get', 'http://localhost:3000/info_get', true);
-        XHP.setRequestHeader('Content-Type', 'text-plain');
-        console.log("Get function in progress");
-        XHP.onreadystatechange = function(){
-            if(this.readyState==4 && this.status==200){
-                document.getElementById('DisplayData').innerHTML=JSON.stringify(XHP.responseText);
-                console.log(XHP.responseText);
-            }
-        };
-        XHP.send();
-        console.log("Get function Done");
-    }
-</script>
-
 <div id="footer">
-    <%-include('footer.ejs')%>
+    <!--<%-include('footer.ejs')%>-->
 </div>

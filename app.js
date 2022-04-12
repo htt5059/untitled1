@@ -44,7 +44,6 @@ app.use(logger('combined'));
 
 // set mongoDB
 const mongoose = require('mongoose');
-const {request} = require("express");
 mongoose.connect("mongodb+srv://test:test@cluster0.yuixa.mongodb.net/Info?retryWrites=true&w=majority");
 var InfoSchema = mongoose.Schema({
     name: String,
@@ -111,9 +110,10 @@ app.post('/save', function(req, res){
 // getInfo endpoint
 const getInfo = async function(req, res){
     console.log('Accessing to DB')
-    let Info_func = () => (InfoModel.findOne({_name: "Huy Tuan Tran"}).exec());
-    console.log(Info_func);
-    try{res.send({"Info list": await Info_func})}
+    let Info_func = () => (InfoModel.find({}).exec());
+    try{
+        res.send({"Info list": await Info_func()});
+    }
     catch(e){
         console.log(e);
     }
